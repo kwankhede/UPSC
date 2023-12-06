@@ -77,6 +77,12 @@ scatter_fig = px.scatter(
     title="Interview vs Written Marks in UPSC by Categories",
 )
 
+# Add x and y axis labels
+scatter_fig.update_layout(
+    xaxis_title="Written Marks",
+    yaxis_title="Interview Marks"
+)
+
 # Pie chart
 comm_counts = filtered_df["Comm"].value_counts()
 pie_fig = px.pie(
