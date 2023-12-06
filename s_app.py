@@ -21,9 +21,9 @@ upsc_2022_df["PwBD"] = upsc_2022_df["PwBD"].fillna("No")
 comm_colors = {
     "OBC": "rgb(251,180,174)",  # Pastel1[0]
     "SC": "rgb(179,205, 227)",  # Pastel1[1]
-    "ST": "rgb(255, 255, 204)",  # Pastel1[5]
     "EWS": "rgb(204,235, 197)",  # Pastel1[2]
-    "Open": "rgb(253, 218, 236)",  # Pastel1[7]
+    "ST": "rgb(222, 203, 228)",  # Pastel1[3]
+    "Open": "rgb(254, 217, 166)",  # Pastel1[4]
 }
 
 # Streamlit app
