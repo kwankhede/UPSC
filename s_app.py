@@ -132,3 +132,17 @@ st.header("Distribution of Categories")
 st.plotly_chart(pie_fig)
 st.header("Distribution of Categories Wise Interview Marks")
 st.plotly_chart(box_fig)
+
+# Add another blank row with an empty string
+st.markdown("")
+st.markdown("")
+st.markdown("")
+st.markdown("")
+st.markdown("")
+
+# Add a link to the data source
+st.markdown("[Data Source: UPSC CSM 2022 Marks Recorded Candidates](https://upsc.gov.in/sites/default/files/CSM_2022_MksRcdCandts_Eng_24052023.pdf)")
+
+
+
+ 
