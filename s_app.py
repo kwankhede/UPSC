@@ -18,10 +18,10 @@ upsc_2022_df["Comm"] = upsc_2022_df["Comm"].fillna("Open")
 upsc_2022_df["PwBD"] = upsc_2022_df["PwBD"].fillna("No")
 
 # Use light24 colors for each 'Comm' category
-comm_colors = px.colors.qualitative.Light24[:5]
+comm_colors = px.colors.qualitative.Pastel1[:5]
 
 # Streamlit app
-st.title("UPSC Result 2022 : Data Analysis ")
+st.title("UPSC Result : Data Analysis ")
 st.header("Interview vs Written Marks by Categories")
 
 # Default values for range and all data
@@ -67,15 +67,12 @@ scatter_fig = px.scatter(
     x="W_total",
     y="PT_Marks",
     color="Comm",
-    color_discrete_map=comm_colors,
+    color_discrete_map=dict(zip(selected_comm, comm_colors)),
     title="Interview vs Written Marks in UPSC by Categories",
 )
 
 # Add x and y axis labels
-scatter_fig.update_layout(
-    xaxis_title="Written Marks",
-    yaxis_title="Interview Marks"
-)
+scatter_fig.update_layout(xaxis_title="Written Marks", yaxis_title="Interview Marks")
 
 # Pie chart
 comm_counts = filtered_df["Comm"].value_counts()
@@ -85,7 +82,7 @@ pie_fig = px.pie(
     values=comm_counts.values,
     hole=0.3,
     color=comm_counts.index,
-    color_discrete_map=comm_colors,
+    color_discrete_map=dict(zip(comm_counts.index, comm_colors)),
 )
 pie_fig.update_traces(
     hoverinfo="label+percent", textinfo="percent+label", textfont_size=15
@@ -98,8 +95,8 @@ box_fig = px.box(
     y="Comm",
     color="Comm",
     labels={"PT_Marks": "Interview Marks", "Comm": "Categories"},
-    category_orders={"Comm": ["Open", "OBC", "SC", "ST", "EWS"]},
-    color_discrete_map=comm_colors,
+    category_orders={"Comm": selected_comm},
+    color_discrete_map=dict(zip(selected_comm, comm_colors)),
 )
 box_fig.update_layout(
     annotations=[
@@ -119,5 +116,5 @@ box_fig.update_layout(
 st.plotly_chart(scatter_fig)
 st.header("Distribution of Categories")
 st.plotly_chart(pie_fig)
-st.header("Distribution of Categories wise Interview marks ")
+st.header("Distribution of Categories Wise Interview Marks")
 st.plotly_chart(box_fig)
