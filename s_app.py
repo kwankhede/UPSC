@@ -27,7 +27,7 @@ comm_colors = {
 }
 
 # Streamlit app
-st.title("UPSC Result : Data Analysis ")
+st.title("UPSC Result 2022 : Data Analysis ")
 st.header("Interview vs Written Marks by Categories")
 
 # Default values for range and all data
