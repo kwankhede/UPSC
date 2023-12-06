@@ -17,14 +17,8 @@ for sheet_name, sheet_df in sheets_dict.items():
 upsc_2022_df["Comm"] = upsc_2022_df["Comm"].fillna("Open")
 upsc_2022_df["PwBD"] = upsc_2022_df["PwBD"].fillna("No")
 
-# Dark colors for each 'Comm' category
-comm_colors = {
-    "OBC": "brown",
-    "EWS": "red",
-    "Open": "black",
-    "SC": "blue",
-    "ST": "yellow",
-}
+# Use light24 colors for each 'Comm' category
+comm_colors = px.colors.qualitative.Light24[:5]
 
 # Streamlit app
 st.title("UPSC Result 2022 : Data Analysis ")
