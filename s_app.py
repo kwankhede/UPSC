@@ -98,7 +98,21 @@ box_fig = px.box(
     category_orders={"Comm": selected_comm},
     color_discrete_map=dict(zip(selected_comm, comm_colors)),
 )
+# Add vertical line for full data median
+full_data_median = upsc_2022_df["PT_Marks"].median()
 box_fig.update_layout(
+    shapes=[
+        {
+            "type": "line",
+            "x0": full_data_median,
+            "x1": full_data_median,
+            "y0": -0.5,
+            "y1": len(selected_comm) - 0.5,
+            "xref": "x",
+            "yref": "y",
+            "line": dict(color="red", width=2),
+        },
+    ],
     annotations=[
         dict(
             x=1.15,
@@ -109,7 +123,7 @@ box_fig.update_layout(
             align="left",
             font=dict(size=12),
         )
-    ]
+    ],
 )
 
 # Display the charts
