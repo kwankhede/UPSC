@@ -17,11 +17,17 @@ for sheet_name, sheet_df in sheets_dict.items():
 upsc_2022_df["Comm"] = upsc_2022_df["Comm"].fillna("Open")
 upsc_2022_df["PwBD"] = upsc_2022_df["PwBD"].fillna("No")
 
-# Use light24 colors for each 'Comm' category
-comm_colors = px.colors.qualitative.Pastel1[:5]
+# Fixed colors for each 'Comm' category
+comm_colors = {
+    "OBC": "rgb(255, 127, 14)",  # Pastel1[0]
+    "SC": "rgb(31, 119, 180)",  # Pastel1[1]
+    "ST": "rgb(44, 160, 44)",  # Pastel1[2]
+    "EWS": "rgb(214, 39, 40)",  # Pastel1[3]
+    "Open": "rgb(148, 103, 189)",  # Pastel1[4]
+}
 
 # Streamlit app
-st.title("UPSC Result 2022 : Data Analysis ")
+st.title("UPSC Result 2022: Data Analysis ")
 st.header("Interview vs Written Marks by Categories")
 
 # Default values for range and all data
@@ -61,13 +67,13 @@ filtered_df = upsc_2022_df[
     & (upsc_2022_df.index < rows_range[1])
 ]
 
-# Scatter plot with custom color mapping
+# Scatter plot with fixed color mapping
 scatter_fig = px.scatter(
     filtered_df,
     x="W_total",
     y="PT_Marks",
     color="Comm",
-    color_discrete_map=dict(zip(selected_comm, comm_colors)),
+    color_discrete_map=comm_colors,
     title="Interview vs Written Marks in UPSC by Categories",
 )
 
@@ -82,7 +88,7 @@ pie_fig = px.pie(
     values=comm_counts.values,
     hole=0.3,
     color=comm_counts.index,
-    color_discrete_map=dict(zip(comm_counts.index, comm_colors)),
+    color_discrete_map=comm_colors,
 )
 pie_fig.update_traces(
     hoverinfo="label+percent", textinfo="percent+label", textfont_size=15
@@ -96,7 +102,7 @@ box_fig = px.box(
     color="Comm",
     labels={"PT_Marks": "Interview Marks", "Comm": "Categories"},
     category_orders={"Comm": selected_comm},
-    color_discrete_map=dict(zip(selected_comm, comm_colors)),
+    color_discrete_map=comm_colors,
 )
 # Add vertical line for full data median
 full_data_median = upsc_2022_df["PT_Marks"].median()
@@ -141,8 +147,6 @@ st.markdown("")
 st.markdown("")
 
 # Add a link to the data source
-st.markdown("[Data Source: UPSC CSM 2022 Marks Recorded Candidates](https://upsc.gov.in/sites/default/files/CSM_2022_MksRcdCandts_Eng_24052023.pdf)")
-
-
-
- 
+st.markdown(
+    "[Data Source: UPSC CSM 2022 Marks Recorded Candidates](https://upsc.gov.in/sites/default/files/CSM_2022_MksRcdCandts_Eng_24052023.pdf)"
+)
