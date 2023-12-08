@@ -1,5 +1,7 @@
 import streamlit as st
 import plotly.express as px
+import plotly.figure_factory as ff
+import numpy as np
 import pandas as pd
 
 # Load data
@@ -49,7 +51,7 @@ w_total_range = st.slider(
     step=25,
 )
 
-# Range slider for number of rows to display
+# Range slider for the number of rows to display
 rows_range = st.slider(
     "Select range for UPSC All India Ranks to display",
     1,
@@ -77,7 +79,7 @@ scatter_fig = px.scatter(
     title="Interview vs Written Marks in UPSC by Categories",
 )
 
-# Add x and y axis labels
+# Add x and y-axis labels
 scatter_fig.update_layout(xaxis_title="Written Marks", yaxis_title="Interview Marks")
 
 # Pie chart
@@ -104,7 +106,7 @@ box_fig = px.box(
     category_orders={"Comm": selected_comm},
     color_discrete_map=comm_colors,
 )
-# Add vertical line for full data median
+# Add a vertical line for the full data median
 full_data_median = upsc_2022_df["PT_Marks"].median()
 box_fig.update_layout(
     shapes=[
@@ -132,12 +134,77 @@ box_fig.update_layout(
     ],
 )
 
+# Box plot for 'W_total'
+box_fig_w_total = px.box(
+    filtered_df,
+    x="W_total",
+    y="Comm",
+    color="Comm",
+    labels={"W_total": "Written Marks", "Comm": "Categories"},
+    category_orders={"Comm": selected_comm},
+    color_discrete_map=comm_colors,
+)
+# Add a vertical line for the full data median
+full_data_median_w_total = upsc_2022_df["W_total"].median()
+box_fig_w_total.update_layout(
+    shapes=[
+        {
+            "type": "line",
+            "x0": full_data_median_w_total,
+            "x1": full_data_median_w_total,
+            "y0": -0.5,
+            "y1": len(selected_comm) - 0.5,
+            "xref": "x",
+            "yref": "y",
+            "line": dict(color="red", width=2),
+        },
+    ],
+    annotations=[
+        dict(
+            x=1.15,
+            y=0.5,
+            xref="paper",
+            yref="paper",
+            showarrow=False,
+            align="left",
+            font=dict(size=12),
+        )
+    ],
+)
+
 # Display the charts
 st.plotly_chart(scatter_fig)
 st.header("Distribution of Categories")
 st.plotly_chart(pie_fig)
 st.header("Distribution of Categories Wise Interview Marks")
 st.plotly_chart(box_fig)
+st.header("Distribution of Categories Wise Written Marks")
+st.plotly_chart(box_fig_w_total)
+
+# Add histograms and rug plots for 'PT_Marks' and 'W_total'
+hist_data_pt_marks = [
+    filtered_df[filtered_df["Comm"] == comm]["PT_Marks"] for comm in selected_comm
+]
+hist_data_w_total = [
+    filtered_df[filtered_df["Comm"] == comm]["W_total"] for comm in selected_comm
+]
+
+group_labels = selected_comm
+colors = list(comm_colors.values())
+
+# Histogram and Rug plot for 'PT_Marks'
+fig_pt_marks = ff.create_distplot(
+    hist_data_pt_marks, group_labels, colors=colors, bin_size=10, show_curve=False
+)
+fig_pt_marks.update_layout(title_text="Distribution of Interview Marks")
+st.plotly_chart(fig_pt_marks)
+
+# Histogram and Rug plot for 'W_total'
+fig_w_total = ff.create_distplot(
+    hist_data_w_total, group_labels, colors=colors, bin_size=10, show_curve=False
+)
+fig_w_total.update_layout(title_text="Distribution of Written Marks")
+st.plotly_chart(fig_w_total)
 
 # Add another blank row with an empty string
 st.markdown("")
